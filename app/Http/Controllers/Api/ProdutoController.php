@@ -26,9 +26,9 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        $response = $this->produtos->select('nome', 'descricao', 'categoria', 'preco')->get();
+        $response = $this->produtos->select('id', 'nome', 'descricao', 'categoria', 'preco')->paginate(5);
 
-        return response()->json(['result' => $response]);
+        return response()->json($response);
     }
 
     /**
@@ -48,46 +48,23 @@ class ProdutoController extends Controller
 
         $new_produto = $this->produtos->create($request->all());
 
-        $kit['fk_produto'] = $new_produto->id;
-        $kit['quantidade'] = $request->quantidade;
-        $kit['descricao'] = trim($request->descricao_kit);
+        foreach($request->kit as $item)
+        {
+            $kit['fk_produto'] = $new_produto->id;
+            $kit['quantidade'] = $item['quantidade'];
+            $kit['descricao'] = $item['descricao'];
 
-        $this->kits->create($kit);
+            $this->kits->create($kit);
+        }
 
         DB::commit();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function deletar(Request $request)
     {
-        //
-    }
+        $this->kits->where('fk_produto', $request->id)->delete();
+        $this->produtos->destroy($request->id);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return true;
     }
 }

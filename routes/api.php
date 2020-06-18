@@ -14,13 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::namespace('api')->group(function(){
     Route::prefix('produto')->group(function(){
         Route::get('/', 'ProdutoController@index')->name('produto.index');
         Route::post('/', 'ProdutoController@store')->name('produto.store');
+        Route::post('/deletar', 'ProdutoController@deletar')->name('produto.destroy');
     });
 });
