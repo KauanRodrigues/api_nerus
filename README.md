@@ -6,9 +6,9 @@
 
 ## Acessando os Endpoints da API
 
-# GET
+### GET
 /api/produto - traz os produtos do Banco de Dados, utilizando paginação.
 
-# POST
+### POST
 /api/produto - recebe os dados do produto que está sendo cadastrado e salva no Banco de Dados.
 /api/produto/deletar - recebe o ID do produto a ser deletado.
